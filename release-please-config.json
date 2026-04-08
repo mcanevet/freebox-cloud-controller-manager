@@ -2,10 +2,6 @@
     "release-type": "simple",
     "bump-minor-pre-major": true,
     "bump-patch-for-minor-pre-major": true,
-    "packages": {
-        ".": {
-            "package-name": "freebox-cloud-controller-manager",
-            "changelog-path": "CHANGELOG.md"
-        }
-    }
+    "package-name": "freebox-cloud-controller-manager",
+    "changelog-path": "CHANGELOG.md"
 }
