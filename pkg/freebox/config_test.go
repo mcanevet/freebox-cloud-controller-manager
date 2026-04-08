@@ -1,7 +1,6 @@
 package freebox
 
 import (
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -23,7 +22,7 @@ func TestConfigFromEnv(t *testing.T) {
 }
 
 func TestConfigFromEnv_MissingEndpoint(t *testing.T) {
-	os.Unsetenv("FREEBOX_ENDPOINT")
+	t.Setenv("FREEBOX_ENDPOINT", "")
 	t.Setenv("FREEBOX_VERSION", "v8")
 	t.Setenv("FREEBOX_APP_ID", "fr.freebox.ccm")
 	t.Setenv("FREEBOX_TOKEN", "test-token")
@@ -35,7 +34,7 @@ func TestConfigFromEnv_MissingEndpoint(t *testing.T) {
 
 func TestConfigFromEnv_MissingVersion(t *testing.T) {
 	t.Setenv("FREEBOX_ENDPOINT", "https://mafreebox.freebox.fr")
-	os.Unsetenv("FREEBOX_VERSION")
+	t.Setenv("FREEBOX_VERSION", "")
 	t.Setenv("FREEBOX_APP_ID", "fr.freebox.ccm")
 	t.Setenv("FREEBOX_TOKEN", "test-token")
 
@@ -47,7 +46,7 @@ func TestConfigFromEnv_MissingVersion(t *testing.T) {
 func TestConfigFromEnv_MissingAppID(t *testing.T) {
 	t.Setenv("FREEBOX_ENDPOINT", "https://mafreebox.freebox.fr")
 	t.Setenv("FREEBOX_VERSION", "v8")
-	os.Unsetenv("FREEBOX_APP_ID")
+	t.Setenv("FREEBOX_APP_ID", "")
 	t.Setenv("FREEBOX_TOKEN", "test-token")
 
 	_, err := ConfigFromEnv()
@@ -59,7 +58,7 @@ func TestConfigFromEnv_MissingToken(t *testing.T) {
 	t.Setenv("FREEBOX_ENDPOINT", "https://mafreebox.freebox.fr")
 	t.Setenv("FREEBOX_VERSION", "v8")
 	t.Setenv("FREEBOX_APP_ID", "fr.freebox.ccm")
-	os.Unsetenv("FREEBOX_TOKEN")
+	t.Setenv("FREEBOX_TOKEN", "")
 
 	_, err := ConfigFromEnv()
 	require.Error(t, err)
