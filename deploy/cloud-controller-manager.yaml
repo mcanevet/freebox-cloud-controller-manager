@@ -1,0 +1,81 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: freebox-cloud-controller-manager
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: system:freebox-cloud-controller-manager
+rules:
+  - apiGroups: [""]
+    resources: [nodes]
+    verbs: [get, list, watch, patch, update]
+  - apiGroups: [""]
+    resources: [nodes/status]
+    verbs: [patch, update]
+  - apiGroups: [""]
+    resources: [events]
+    verbs: [create, patch, update]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: system:freebox-cloud-controller-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:freebox-cloud-controller-manager
+subjects:
+  - kind: ServiceAccount
+    name: freebox-cloud-controller-manager
+    namespace: kube-system
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: freebox-cloud-controller-manager
+  namespace: kube-system
+  labels:
+    app: freebox-cloud-controller-manager
+spec:
+  selector:
+    matchLabels:
+      app: freebox-cloud-controller-manager
+  template:
+    metadata:
+      labels:
+        app: freebox-cloud-controller-manager
+    spec:
+      serviceAccountName: freebox-cloud-controller-manager
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          effect: NoSchedule
+        # Allow scheduling on nodes that haven't been initialized by the CCM yet.
+        - key: node.cloudprovider.kubernetes.io/uninitialized
+          value: "true"
+          effect: NoSchedule
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: ""
+      hostNetwork: true
+      priorityClassName: system-cluster-critical
+      containers:
+        - name: freebox-cloud-controller-manager
+          image: ghcr.io/mcanevet/freebox-cloud-controller-manager:latest
+          command:
+            - /freebox-cloud-controller-manager
+            - --cloud-provider=freebox
+            - --leader-elect=true
+            - --use-service-account-credentials=true
+            - --controllers=cloud-node
+          envFrom:
+            - secretRef:
+                name: freebox-cloud-config
+          resources:
+            requests:
+              cpu: 50m
+              memory: 50Mi
+            limits:
+              memory: 128Mi
