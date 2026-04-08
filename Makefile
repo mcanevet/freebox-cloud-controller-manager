@@ -1,4 +1,6 @@
-IMG ?= ghcr.io/mcanevet/freebox-cloud-controller-manager:latest
+VERSION ?= 0.1.0
+IMG_TAG ?= $(VERSION)
+IMG ?= ghcr.io/mcanevet/freebox-cloud-controller-manager:$(IMG_TAG)
 
 .PHONY: build
 build:
@@ -51,3 +53,11 @@ docker-push:
 setup-envtest:
 	go install sigs.k8s.io/controller-runtime/tools/setup-envtest@latest
 	setup-envtest use 1.35.0
+
+VERSION ?= 0.1.0
+IMG_TAG ?= v$(VERSION)
+IMG ?= ghcr.io/mcanevet/freebox-cloud-controller-manager:$(IMG_TAG)
+
+.Phony: release
+release: build docker-build docker-push
+
