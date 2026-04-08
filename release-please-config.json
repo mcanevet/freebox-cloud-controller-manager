@@ -4,7 +4,8 @@
     "bump-patch-for-minor-pre-major": true,
     "packages": {
         ".": {
-            "package-name": "freebox-cloud-controller-manager"
+            "package-name": "freebox-cloud-controller-manager",
+            "changelog-path": "CHANGELOG.md"
         }
     }
 }
