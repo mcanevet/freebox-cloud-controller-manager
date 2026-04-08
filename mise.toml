@@ -1,0 +1,6 @@
+[env]
+FREEBOX_ENDPOINT = "http://mafreebox.freebox.fr"
+FREEBOX_VERSION = "latest"
+FREEBOX_APP_ID = "terraform-provider-freebox"
+FREEBOX_TOKEN = "1VotqrmACWPGNUl1BvPcaHO0F7w/mNzwiOrZs2pYeG+x5Li+bNjDWF6ZKxn8TK34"
+FREEBOX_DEVICE = "terraform"

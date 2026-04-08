@@ -6,7 +6,27 @@ build:
 
 .PHONY: test
 test:
-	go test ./...
+	go test -v -run '^TestConfig|^TestNode|^TestInstance' ./...
+
+.PHONY: test-unit
+test-unit:
+	go test -v -race -run '^TestConfig|^TestNode|^TestInstance' ./...
+
+.PHONY: test-integration
+test-integration:
+	@if ! command -v setup-envtest >/dev/null 2>&1; then \
+		echo "Installing setup-envtest..."; \
+		go install sigs.k8s.io/controller-runtime/tools/setup-envtest@latest; \
+	fi
+	KUBEBUILDER_ASSETS=$$(setup-envtest use 1.35.0 -p path) go test -v -tags=integration -run '^TestIntegration' ./...
+
+.PHONY: test-all
+test-all: test-unit test-integration
+
+.PHONY: test-coverage
+test-coverage:
+	go test -coverprofile=coverage.out ./...
+	go tool cover -html=coverage.out -o coverage.html
 
 .PHONY: fmt
 fmt:
@@ -16,6 +36,9 @@ fmt:
 vet:
 	go vet ./...
 
+.PHONY: lint
+lint: fmt vet
+
 .PHONY: docker-build
 docker-build:
 	docker build -t $(IMG) .
@@ -23,3 +46,8 @@ docker-build:
 .PHONY: docker-push
 docker-push:
 	docker push $(IMG)
+
+.PHONY: setup-envtest
+setup-envtest:
+	go install sigs.k8s.io/controller-runtime/tools/setup-envtest@latest
+	setup-envtest use 1.35.0

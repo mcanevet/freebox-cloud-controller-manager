@@ -41,10 +41,10 @@ type Config struct {
 // ConfigFromEnv reads the Freebox CCM configuration from environment variables.
 // The following variables are required:
 //
-//	FREEBOX_ENDPOINT      – base URL of the Freebox
-//	FREEBOX_API_VERSION   – API version (e.g. "v8")
-//	FREEBOX_APP_ID        – application identifier
-//	FREEBOX_APP_TOKEN     – private application token
+//	FREEBOX_ENDPOINT    – base URL of the Freebox
+//	FREEBOX_VERSION      – API version (e.g. "v8", "latest")
+//	FREEBOX_APP_ID       – application identifier
+//	FREEBOX_TOKEN        – private application token
 func ConfigFromEnv() (*Config, error) {
 	get := func(key string) (string, error) {
 		v := os.Getenv(key)
@@ -58,7 +58,7 @@ func ConfigFromEnv() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	version, err := get("FREEBOX_API_VERSION")
+	version, err := get("FREEBOX_VERSION")
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func ConfigFromEnv() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	token, err := get("FREEBOX_APP_TOKEN")
+	token, err := get("FREEBOX_TOKEN")
 	if err != nil {
 		return nil, err
 	}
