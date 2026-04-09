@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.1](https://github.com/mcanevet/freebox-cloud-controller-manager/compare/v0.1.0...v0.1.1) (2026-04-09)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([6b0cd5b](https://github.com/mcanevet/freebox-cloud-controller-manager/commit/6b0cd5b02c88c2150cf5c11e6ebc31134cff8943))
+* **deps:** update all non-major dependencies ([7462dd4](https://github.com/mcanevet/freebox-cloud-controller-manager/commit/7462dd4baaa7ad18c72739de4ca8c2d7299f28e5))
+
 ## 0.0.0 (2026-04-08)
 
 ### Features
